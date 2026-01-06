@@ -19,4 +19,8 @@ export default defineSchema({
     order: v.number(),
     createdAt: v.number(),
   }).index("by_section", ["sectionId"]),
+
+  catCounter: defineTable({
+    count: v.number(),
+  }),
 });

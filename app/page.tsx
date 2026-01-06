@@ -5,7 +5,7 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Heart } from "lucide-react";
 import heartPixel from "@/public/icons/heart.png";
-import pixelCat from "@/public/pixel-cat.gif";
+import Cat from "@/components/Cat";
 import CollectionsCard from "@/components/CollectionCard";
 
 export default function Home() {
@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <main className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-3xl">
-        <div className="text-center my-16 space-y-4">
+        <div className="text-center max-sm:my-12 max-sm:mb-24 sm:my-16 space-y-4">
           <div className="inline-flex justify-center items-center gap-2 mb-2">
             <Image
               src={heartPixel.src}
@@ -45,11 +45,8 @@ export default function Home() {
         </div>
 
         <div className="relative">
-          <Image
-            src={pixelCat}
-            alt="pixel cat"
-            className="absolute -top-20 sm:-top-30 right-0 h-20 sm:h-30 w-auto -z-10 pointer-events-none"
-          />
+          <Cat />
+
           <div className="relative backdrop-blur-sm bg-white/60 border-2 border-pink-100 p-4 lg:p-6">
             <div className="flex items-center justify-center font-secondary gap-2 mb-8">
               <p className="text-[#CF1662]">⋆｡˚ ✧</p>
@@ -75,8 +72,8 @@ export default function Home() {
                 ))}
               </div>
             )}
-            <div className="flex gap-3 text-[#CF1662] w-full items-center justify-center">
-              <div className="text-center flex flex-col items-center justify-center gap-1 mt-8 text-xs">
+            <div className="text-[#CF1662] w-full">
+              <div className="text-center flex flex-col items-center justify-center mt-8 text-xs">
                 <p>
                   If you purchase from any of these links, I may receive a small
                   commission.

@@ -69,7 +69,7 @@ export default function ListPage({
         </Link>
 
         <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-styled text-[#CF1662] mb-2">
+          <h1 className="text-4xl sm:text-5xl font-secondary text-[#CF1662] mb-2">
             {section.title}
           </h1>
           {section.description && (
@@ -132,15 +132,13 @@ export default function ListPage({
                           {item.itemTitle || "View Product"}
                         </h2>
                         {item.price && (
-                          <p className="text-base font-bold text-pink-600">
-                            ₹{item.price}
-                          </p>
+                          <p className="text-sm text-pink-600">₹{item.price}</p>
                         )}
                       </div>
 
                       <div className="flex items-center justify-center py-2 bg-pink-100 rounded-full group-hover:bg-pink-200 transition-colors">
                         <span className="text-sm font-semibold text-pink-600">
-                          shop now ♡
+                          shop now
                         </span>
                         <svg
                           className="w-4 h-4 ml-1 text-pink-600 transform group-hover:translate-x-1 transition-transform"
