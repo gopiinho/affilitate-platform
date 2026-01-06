@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { checkAuth, logout } from "@/lib/auth";
+import { Button } from "@/components/ui/button";
 
 export default function DashboardLayout({
   children,
@@ -23,19 +24,16 @@ export default function DashboardLayout({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-card">
       <nav className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <h1 className="text-xl font-bold text-gray-900">
-              Affiliate Dashboard ✨
+              Affiliate Dashboard
             </h1>
-            <button
-              onClick={handleLogout}
-              className="text-sm text-gray-600 hover:text-gray-900 font-medium"
-            >
+            <Button onClick={handleLogout} className="text-sm font-medium">
               Logout
-            </button>
+            </Button>
           </div>
         </div>
       </nav>

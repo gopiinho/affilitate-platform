@@ -1,4 +1,3 @@
-// components/ItemCard.tsx
 "use client";
 
 import { Id } from "@/convex/_generated/dataModel";
@@ -35,42 +34,45 @@ const platformColors: Record<string, string> = {
 };
 
 export default function ItemCard({ item, onEdit, onDelete }: ItemCardProps) {
+  const capitalizedPlatform =
+    item.platform.charAt(0).toUpperCase() + item.platform.slice(1);
+
   return (
-    <Card className="hover:shadow-lg transition-shadow">
+    <Card className="hover:shadow-lg overflow-hidden pt-0 transition-shadow flex flex-col h-full">
       {item.imageUrl && (
         <div className="relative w-full h-48 bg-gray-100">
           <Image
             src={item.imageUrl}
             alt={item.itemTitle || "Product"}
             fill
-            className="object-cover rounded-t-lg"
+            className="object-cover"
           />
         </div>
       )}
 
-      <CardHeader className="space-y-2">
+      <CardHeader className="space-y-2 pb-3">
         {item.itemTitle && (
-          <h3 className="font-semibold text-lg line-clamp-2">
+          <h3 className="font-semibold text-lg line-clamp-2 min-h-[3.5rem]">
             {item.itemTitle}
           </h3>
         )}
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between gap-2">
           <Badge
             className={platformColors[item.platform] || platformColors.other}
           >
-            {item.platform}
+            {capitalizedPlatform}
           </Badge>
 
           {item.price && (
             <span className="text-sm font-semibold text-pink-600">
-              {item.price}
+              ₹{item.price}
             </span>
           )}
         </div>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="pb-3 grow">
         <a
           href={item.affiliateLink}
           target="_blank"
@@ -81,7 +83,7 @@ export default function ItemCard({ item, onEdit, onDelete }: ItemCardProps) {
         </a>
       </CardContent>
 
-      <CardFooter className="flex gap-2">
+      <CardFooter className="flex gap-2 pt-3">
         <Button onClick={onEdit} variant="outline" size="sm" className="flex-1">
           <Pencil className="h-3 w-3 mr-1" />
           Edit

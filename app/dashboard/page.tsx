@@ -9,7 +9,7 @@ import SectionCard from "@/components/SectionCard";
 import CreateSectionModal from "@/components/CreateSectionModal";
 import EditSectionModal from "@/components/EditSectionModal";
 import { Button } from "@/components/ui/button";
-import { Plus, Sparkles } from "lucide-react";
+import { Plus, Sparkles, Package } from "lucide-react";
 
 export default function DashboardPage() {
   const sections = useQuery(api.sections.list);
@@ -44,7 +44,6 @@ export default function DashboardPage() {
         <div>
           <h2 className="text-3xl font-bold tracking-tight flex items-center gap-2">
             Your Sections
-            <Sparkles className="h-6 w-6 text-yellow-500" />
           </h2>
           <p className="text-muted-foreground mt-1">
             Manage your affiliate product collections
@@ -63,7 +62,7 @@ export default function DashboardPage() {
       {sections.length === 0 ? (
         <div className="border-2 border-dashed rounded-lg p-12 text-center">
           <div className="flex justify-center mb-4">
-            {/* <Package className="h-12 w-12 text-muted-foreground" /> */}
+            <Package className="h-12 w-12 text-muted-foreground" />
           </div>
           <h3 className="text-lg font-semibold mb-2">No sections yet</h3>
           <p className="text-muted-foreground mb-4">
