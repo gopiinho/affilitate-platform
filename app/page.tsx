@@ -1,55 +1,65 @@
 "use client";
 
+import Image from "next/image";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import Link from "next/link";
-import { Sparkles, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
+import heartPixel from "@/public/icons/heart.png";
+import pixelCat from "@/public/pixel-cat.gif";
+import CollectionsCard from "@/components/CollectionCard";
 
 export default function Home() {
   const sections = useQuery(api.sections.list);
 
   if (sections === undefined) {
     return (
-      <main className="min-h-screen flex items-center justify-center ">
+      <main className="min-h-screen flex items-center justify-center">
         <div className="text-muted-foreground animate-pulse">Loading...</div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4 ">
+    <main className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-3xl">
         <div className="text-center my-16 space-y-4">
-          <div className="inline-flex items-center gap-2 mb-2">
-            <Heart className="w-8 h-8 text-[#CF1662] fill-[#CF1662]" />
-            <h1 className="text-5xl text-[#CF1662] sm:text-7xl font-styled">
+          <div className="inline-flex justify-center items-center gap-2 mb-2">
+            <Image
+              src={heartPixel.src}
+              alt="heart pixel"
+              width={32}
+              height={32}
+              className="w-5 h-5 sm:w-7.5 sm:h-7.5"
+            />
+            <h1 className="text-5xl text-[#CF1662] sm:text-7xl font-secondary">
               neme's world
             </h1>
-            <Heart className="w-8 h-8 text-[#CF1662] fill-[#CF1662]" />
+            <Image
+              src={heartPixel.src}
+              alt="heart pixel"
+              width={32}
+              height={32}
+              className="w-5 h-5 sm:w-7.5 sm:h-7.5"
+            />
           </div>
-          <p className="text-base font-secondary">
-            curated with love, just for you
-          </p>
         </div>
 
         <div className="relative">
-          <div className="absolute -top-6 -left-6 w-24 h-24 bg-pink-200 rounded-full blur-3xl opacity-50"></div>
-          <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-purple-200 rounded-full blur-3xl opacity-50"></div>
-
+          <Image
+            src={pixelCat}
+            alt="pixel cat"
+            className="absolute -top-20 sm:-top-30 right-0 h-20 sm:h-30 w-auto -z-10 pointer-events-none"
+          />
           <div className="relative backdrop-blur-sm bg-white/60 border-2 border-pink-100 p-4 lg:p-6">
-            <div className="flex items-center justify-center gap-2 mb-8">
-              <Sparkles className="w-3 h-3 text-pink-500" />
-              <h5 className="text-base font-semibold text-gray-800 font-secondary">
-                things i'm loving right now
-              </h5>
-              <Sparkles className="w-3 h-3 text-pink-500" />
+            <div className="flex items-center justify-center font-secondary gap-2 mb-8">
+              <p className="text-[#CF1662]">⋆｡˚ ✧</p>
+              <h5 className="text-base font-secondary">my collections</h5>
+              <p className="text-[#CF1662]">✧ ⋆｡˚</p>
             </div>
 
             {sections.length === 0 ? (
               <div className="text-center py-16">
-                <div className="mb-4">
-                  <Heart className="w-16 h-16 mx-auto text-pink-300" />
-                </div>
+                <Heart className="w-16 h-16 mx-auto text-pink-300 mb-4" />
                 <p className="text-gray-500 text-lg">
                   building my collection... check back soon! ♡
                 </p>
@@ -57,73 +67,33 @@ export default function Home() {
             ) : (
               <div className="grid grid-cols-1 gap-6">
                 {sections.map((section, index) => (
-                  <Link
+                  <CollectionsCard
                     key={section._id}
-                    href={`/list/${section._id}`}
-                    className="group relative"
-                    style={{
-                      animationDelay: `${index * 100}ms`,
-                    }}
-                  >
-                    <div className="relative w-full bg-white p-6 border-2 border-pink-200 transition-all duration-300 hover:shadow-2xl group-hover:border-pink-300">
-                      <div className="absolute top-3 right-3">
-                        <div className="w-8 h-8 bg-pink-200 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                          <Heart className="w-4 h-4 text-pink-600 fill-pink-600" />
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col gap-4 min-h-[140px]">
-                        <div className="flex-1">
-                          <h2 className="text-xl font-bold text-gray-800 mb-2 leading-tight group-hover:text-pink-600 transition-colors">
-                            {section.title}
-                          </h2>
-                          {section.description && (
-                            <p className="text-sm text-gray-600 line-clamp-2 leading-relaxed">
-                              {section.description}
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="flex items-center justify-between pt-2 border-t border-pink-100">
-                          <span className="text-xs text-gray-500 font-medium">
-                            see collection
-                          </span>
-                          <div className="flex items-center gap-1 text-pink-500 group-hover:gap-2 transition-all">
-                            <span className="text-sm font-semibold">♡</span>
-                            <svg
-                              className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                              />
-                            </svg>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
+                    section={section}
+                    index={index}
+                  />
                 ))}
               </div>
             )}
-
-            {sections.length > 0 && (
-              <div className="mt-8 text-center">
-                <p className="text-xs italic">
-                  updated with new finds regularly ✨
+            <div className="flex gap-3 text-[#CF1662] w-full items-center justify-center">
+              <div className="text-center flex flex-col items-center justify-center gap-1 mt-8 text-xs">
+                <p>
+                  If you purchase from any of these links, I may receive a small
+                  commission.
                 </p>
+                <div className="flex gap-2 items-center justify-center">
+                  Thank youuu for the support
+                  <Image
+                    src={heartPixel.src}
+                    alt="heart pixel"
+                    width={5}
+                    height={5}
+                    className="w-1 h-1 sm:w-2 sm:h-2"
+                  />
+                </div>
               </div>
-            )}
+            </div>
           </div>
-        </div>
-
-        <div className="text-center mt-8 text-xs">
-          some links may earn me a small commission at no extra cost to you
         </div>
       </div>
     </main>

@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
 import { icons } from "@/lib/icons";
+import heartPixel from "@/public/icons/heart.png";
 
 const platformLogos: Record<string, any> = {
   amazon: icons.amazonLogo,
@@ -72,18 +73,18 @@ export default function ListPage({
             {section.title}
           </h1>
           {section.description && (
-            <p className="text-gray-600 mt-2 text-lg">{section.description}</p>
+            <p className=" mt-2 text-base">{section.description}</p>
           )}
         </div>
 
         {items.length === 0 ? (
-          <div className="text-center py-16 bg-white/60 backdrop-blur-sm border-2 border-pink-100 rounded-3xl shadow-xl">
+          <div className="text-center py-16 bg-pink-50 backdrop-blur-sm border-2 border-pink-100 rounded-3xl shadow-xl">
             <p className="text-gray-600 text-lg">
               No items in this collection yet ♡
             </p>
           </div>
         ) : (
-          <div className="p-6 bg-white/60">
+          <div className="p-6 bg-pink-50">
             <div className="grid max-sm:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {items.map((item, index) => (
                 <a
@@ -160,12 +161,26 @@ export default function ListPage({
                 </a>
               ))}
             </div>
+            <div className="flex gap-3 text-[#CF1662] w-full items-center justify-center">
+              <div className="text-center flex flex-col items-center justify-center gap-1 mt-8 text-xs">
+                <p>
+                  If you purchase from any of these links, I may receive a small
+                  commission.
+                </p>
+                <div className="flex gap-2 items-center justify-center">
+                  Thank youuu for the support
+                  <Image
+                    src={heartPixel.src}
+                    alt="heart pixel"
+                    width={5}
+                    height={5}
+                    className="w-1 h-1 sm:w-2 sm:h-2"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         )}
-
-        <footer className="text-center text-xs  mt-12">
-          some links may earn me a small commission at no extra cost to you
-        </footer>
       </div>
     </main>
   );
