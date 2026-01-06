@@ -83,81 +83,83 @@ export default function ListPage({
             </p>
           </div>
         ) : (
-          <div className="grid max-sm:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {items.map((item, index) => (
-              <a
-                key={item._id}
-                href={item.affiliateLink}
-                target="_blank"
-                rel="nofollow noopener"
-                className="group relative"
-                style={{
-                  animationDelay: `${index * 50}ms`,
-                }}
-              >
-                <div className="relative overflow-hidden border-2 border-pink-200 transition-all duration-300 hover:shadow-2xl hover:border-pink-300">
-                  <div className="absolute top-3 right-3 z-10">
-                    {platformLogos[item.platform] ? (
-                      <div className="bg-white rounded-lg shadow-lg p-2 border border-gray-200">
-                        <Image
-                          src={platformLogos[item.platform]}
-                          alt={platformNames[item.platform]}
-                          width={40}
-                          height={24}
-                          className="object-contain"
-                        />
-                      </div>
-                    ) : (
-                      <Badge className="bg-white text-gray-700 border border-gray-200 shadow-lg">
-                        {platformNames[item.platform] || "Shop"}
-                      </Badge>
-                    )}
-                  </div>
-
-                  {item.imageUrl && (
-                    <div className="w-full h-72">
-                      <img
-                        src={item.imageUrl}
-                        alt={item.itemTitle || "Product"}
-                        className="w-full h-full object-cover transition-transform duration-500"
-                      />
-                    </div>
-                  )}
-
-                  <div className="p-4 bg-pink-100">
-                    <div className="mb-3">
-                      <h2 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2 leading-tight group-hover:text-pink-600 transition-colors">
-                        {item.itemTitle || "View Product"}
-                      </h2>
-                      {item.price && (
-                        <p className="text-base font-bold text-pink-600">
-                          ₹{item.price}
-                        </p>
+          <div className="p-6 bg-white/60">
+            <div className="grid max-sm:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {items.map((item, index) => (
+                <a
+                  key={item._id}
+                  href={item.affiliateLink}
+                  target="_blank"
+                  rel="nofollow noopener"
+                  className="group relative"
+                  style={{
+                    animationDelay: `${index * 50}ms`,
+                  }}
+                >
+                  <div className="relative overflow-hidden border-2 border-pink-200 transition-all duration-300 hover:shadow-2xl hover:border-pink-300">
+                    <div className="absolute top-3 right-3 z-10">
+                      {platformLogos[item.platform] ? (
+                        <div className="bg-white rounded-lg shadow-lg p-2 border border-gray-200">
+                          <Image
+                            src={platformLogos[item.platform]}
+                            alt={platformNames[item.platform]}
+                            width={40}
+                            height={24}
+                            className="object-contain"
+                          />
+                        </div>
+                      ) : (
+                        <Badge className="bg-white text-gray-700 border border-gray-200 shadow-lg">
+                          {platformNames[item.platform] || "Shop"}
+                        </Badge>
                       )}
                     </div>
 
-                    <div className="flex items-center justify-center py-2 bg-pink-100 rounded-full group-hover:bg-pink-200 transition-colors">
-                      <span className="text-sm font-semibold text-pink-600">
-                        shop now ♡
-                      </span>
-                      <svg
-                        className="w-4 h-4 ml-1 text-pink-600 transform group-hover:translate-x-1 transition-transform"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
+                    {item.imageUrl && (
+                      <div className="w-full h-72">
+                        <img
+                          src={item.imageUrl}
+                          alt={item.itemTitle || "Product"}
+                          className="w-full h-full object-cover transition-transform duration-500"
                         />
-                      </svg>
+                      </div>
+                    )}
+
+                    <div className="p-4 grid gap-5 bg-pink-50">
+                      <div className="mb-3">
+                        <h2 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2 leading-tight group-hover:text-pink-600 transition-colors h-10 overflow-hidden">
+                          {item.itemTitle || "View Product"}
+                        </h2>
+                        {item.price && (
+                          <p className="text-base font-bold text-pink-600">
+                            ₹{item.price}
+                          </p>
+                        )}
+                      </div>
+
+                      <div className="flex items-center justify-center py-2 bg-pink-100 rounded-full group-hover:bg-pink-200 transition-colors">
+                        <span className="text-sm font-semibold text-pink-600">
+                          shop now ♡
+                        </span>
+                        <svg
+                          className="w-4 h-4 ml-1 text-pink-600 transform group-hover:translate-x-1 transition-transform"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </a>
-            ))}
+                </a>
+              ))}
+            </div>
           </div>
         )}
 

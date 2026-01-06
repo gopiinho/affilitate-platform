@@ -10,7 +10,7 @@ export default function Home() {
 
   if (sections === undefined) {
     return (
-      <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-50 via-white to-purple-50">
+      <main className="min-h-screen flex items-center justify-center ">
         <div className="text-muted-foreground animate-pulse">Loading...</div>
       </main>
     );
@@ -36,13 +36,13 @@ export default function Home() {
           <div className="absolute -top-6 -left-6 w-24 h-24 bg-pink-200 rounded-full blur-3xl opacity-50"></div>
           <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-purple-200 rounded-full blur-3xl opacity-50"></div>
 
-          <div className="relative backdrop-blur-sm bg-white/60 border-2 border-pink-100 p-8">
+          <div className="relative backdrop-blur-sm bg-white/60 border-2 border-pink-100 p-4 lg:p-6">
             <div className="flex items-center justify-center gap-2 mb-8">
-              <Sparkles className="w-5 h-5 text-pink-500" />
-              <h5 className="text-xl font-semibold text-gray-800 font-secondary">
+              <Sparkles className="w-3 h-3 text-pink-500" />
+              <h5 className="text-base font-semibold text-gray-800 font-secondary">
                 things i'm loving right now
               </h5>
-              <Sparkles className="w-5 h-5 text-pink-500" />
+              <Sparkles className="w-3 h-3 text-pink-500" />
             </div>
 
             {sections.length === 0 ? (
@@ -55,7 +55,7 @@ export default function Home() {
                 </p>
               </div>
             ) : (
-              <div className="grid max-sm:grid-cols-1 grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6">
                 {sections.map((section, index) => (
                   <Link
                     key={section._id}
@@ -65,9 +65,7 @@ export default function Home() {
                       animationDelay: `${index * 100}ms`,
                     }}
                   >
-                    {/* Card with tilt effect on hover */}
-                    <div className="relative bg-gradient-to-br from-white to-pink-50 rounded-2xl p-6 border-2 border-pink-200 transition-all duration-300 hover:shadow-2xl hover:scale-105 hover:-rotate-1 group-hover:border-pink-300">
-                      {/* Corner decoration */}
+                    <div className="relative w-full bg-white p-6 border-2 border-pink-200 transition-all duration-300 hover:shadow-2xl group-hover:border-pink-300">
                       <div className="absolute top-3 right-3">
                         <div className="w-8 h-8 bg-pink-200 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
                           <Heart className="w-4 h-4 text-pink-600 fill-pink-600" />
@@ -124,7 +122,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Affiliate disclosure */}
         <div className="text-center mt-8 text-xs">
           some links may earn me a small commission at no extra cost to you
         </div>
