@@ -1,9 +1,10 @@
 "use client";
 
-import { use } from "react";
+import { use, useRef, useEffect } from "react";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import posthog from "posthog-js";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,38 @@ export default function ListPage({
 
   const section = useQuery(api.sections.getById, { id: listId });
   const items = useQuery(api.items.listBySection, { sectionId: listId });
+
+  // Track if we've captured the collection_viewed event
+  const hasTrackedView = useRef(false);
+
+  // Capture collection_viewed event when section data loads
+  useEffect(() => {
+    if (section && !hasTrackedView.current) {
+      posthog.capture("collection_viewed", {
+        collection_id: listId,
+        collection_title: section.title,
+      });
+      hasTrackedView.current = true;
+    }
+  }, [section, listId]);
+
+  // Handler for affiliate link clicks
+  const handleAffiliateLinkClick = (item: {
+    _id: string;
+    itemTitle?: string;
+    platform: string;
+    price?: string;
+    affiliateLink: string;
+  }) => {
+    posthog.capture("affiliate_link_clicked", {
+      item_id: item._id,
+      item_title: item.itemTitle || undefined,
+      platform: item.platform,
+      price: item.price || undefined,
+      collection_id: listId,
+      collection_title: section?.title,
+    });
+  };
 
   if (section === undefined || items === undefined) {
     return (
@@ -96,6 +129,7 @@ export default function ListPage({
                   style={{
                     animationDelay: `${index * 50}ms`,
                   }}
+                  onClick={() => handleAffiliateLinkClick(item)}
                 >
                   <div className="relative overflow-hidden border-2 border-pink-200 transition-all duration-300 hover:shadow-2xl hover:border-pink-300">
                     <div className="absolute top-3 right-3 z-10">
