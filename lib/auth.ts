@@ -1,45 +1,27 @@
-export const ADMIN_CREDENTIALS = {
-  email: "admin@yoursite.com",
-  password: "your-secure-password-123",
-};
-
-export const setAuthToken = () => {
+export const setAuthToken = (token: string, expiresAt: number) => {
   if (typeof window !== "undefined") {
-    localStorage.setItem("isAuthenticated", "true");
-    localStorage.setItem("authTime", Date.now().toString());
+    localStorage.setItem("authToken", token);
+    localStorage.setItem("authExpiry", expiresAt.toString());
   }
 };
 
-export const checkAuth = (): boolean => {
-  if (typeof window === "undefined") return false;
-
-  const isAuth = localStorage.getItem("isAuthenticated") === "true";
-  const authTime = localStorage.getItem("authTime");
-
-  if (isAuth && authTime) {
-    const daysSinceAuth =
-      (Date.now() - parseInt(authTime)) / (1000 * 60 * 60 * 24);
-    if (daysSinceAuth > 7) {
-      logout();
-      return false;
-    }
-  }
-
-  return isAuth;
+export const getAuthToken = (): string | null => {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem("authToken");
 };
 
-export const logout = () => {
+export const clearAuth = () => {
   if (typeof window !== "undefined") {
-    localStorage.removeItem("isAuthenticated");
-    localStorage.removeItem("authTime");
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("authExpiry");
   }
 };
 
-export const validateCredentials = (
-  email: string,
-  password: string
-): boolean => {
-  return (
-    email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password
-  );
+export const isTokenExpired = (): boolean => {
+  if (typeof window === "undefined") return true;
+
+  const expiry = localStorage.getItem("authExpiry");
+  if (!expiry) return true;
+
+  return Date.now() > parseInt(expiry);
 };

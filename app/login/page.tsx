@@ -1,9 +1,10 @@
-// app/login/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { validateCredentials, setAuthToken, checkAuth } from "@/lib/auth";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { setAuthToken, getAuthToken, isTokenExpired } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,22 +25,31 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  const login = useMutation(api.auth.login);
+  const token = getAuthToken();
+  const sessionValid = useQuery(
+    api.auth.checkSession,
+    token && !isTokenExpired() ? { token } : "skip"
+  );
+
   useEffect(() => {
-    if (checkAuth()) {
+    if (sessionValid?.valid) {
       router.push("/dashboard");
     }
-  }, [router]);
+  }, [sessionValid, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    if (validateCredentials(email, password)) {
-      setAuthToken();
+    try {
+      const result = await login({ email, password });
+      setAuthToken(result.token, result.expiresAt);
       router.push("/dashboard");
-    } else {
-      setError("Invalid email or password");
+    } catch (err: any) {
+      setError(err.message || "Invalid credentials");
+    } finally {
       setLoading(false);
     }
   };

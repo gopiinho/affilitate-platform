@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as auth from "../auth.js";
 import type * as catCounter from "../catCounter.js";
 import type * as items from "../items.js";
 import type * as sections from "../sections.js";
@@ -19,6 +20,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  auth: typeof auth;
   catCounter: typeof catCounter;
   items: typeof items;
   sections: typeof sections;
