@@ -1,0 +1,162 @@
+"use client";
+
+import { useState } from "react";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+interface EditItemModalProps {
+  item: {
+    id: Id<"items">;
+    affiliateLink: string;
+    price?: string;
+    platform: string;
+    itemTitle?: string;
+    imageUrl?: string;
+  };
+  open: boolean;
+  onClose: () => void;
+}
+
+export default function EditItemModal({
+  item,
+  open,
+  onClose,
+}: EditItemModalProps) {
+  const [affiliateLink, setAffiliateLink] = useState(item.affiliateLink);
+  const [price, setPrice] = useState(item.price || "");
+  const [platform, setPlatform] = useState(item.platform);
+  const [itemTitle, setItemTitle] = useState(item.itemTitle || "");
+  const [imageUrl, setImageUrl] = useState(item.imageUrl || "");
+  const [loading, setLoading] = useState(false);
+
+  const updateItem = useMutation(api.items.update);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      await updateItem({
+        id: item.id,
+        affiliateLink,
+        price: price || undefined,
+        platform,
+        itemTitle: itemTitle || undefined,
+        imageUrl: imageUrl || undefined,
+      });
+      onClose();
+    } catch (error) {
+      console.error("Error updating item:", error);
+      alert("Failed to update item");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Edit Item</DialogTitle>
+          <DialogDescription>Update the item details.</DialogDescription>
+        </DialogHeader>
+        <form onSubmit={handleSubmit}>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="edit-item-title">Product Name</Label>
+              <Input
+                id="edit-item-title"
+                value={itemTitle}
+                onChange={(e) => setItemTitle(e.target.value)}
+                placeholder="e.g., Levi's Women's Skinny Jeans"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-affiliate-link">
+                Affiliate Link <span className="text-red-500">*</span>
+              </Label>
+              <Input
+                id="edit-affiliate-link"
+                type="url"
+                value={affiliateLink}
+                onChange={(e) => setAffiliateLink(e.target.value)}
+                placeholder="https://..."
+                required
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="edit-platform">
+                  Platform <span className="text-red-500">*</span>
+                </Label>
+                <Select value={platform} onValueChange={setPlatform}>
+                  <SelectTrigger id="edit-platform">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="amazon">Amazon</SelectItem>
+                    <SelectItem value="flipkart">Flipkart</SelectItem>
+                    <SelectItem value="nykaa">Nykaa</SelectItem>
+                    <SelectItem value="meesho">Meesho</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="edit-price">Price</Label>
+                <Input
+                  id="edit-price"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  placeholder="₹1,999"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="edit-image-url">Image URL</Label>
+              <Input
+                id="edit-image-url"
+                type="url"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                placeholder="https://example.com/image.jpg"
+              />
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button type="button" variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button type="submit" disabled={loading || !affiliateLink}>
+              {loading ? "Saving..." : "Save Changes"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}

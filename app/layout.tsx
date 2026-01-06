@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Pacifico, DM_Sans, Jersey_10 } from "next/font/google";
 import "./globals.css";
+import { ConvexClientProvider } from "@/components/ConvexClientProvider";
 
 const pacifico = Pacifico({
   weight: "400",
@@ -35,7 +36,7 @@ export default function RootLayout({
       <body
         className={`${dm.variable} ${pacifico.variable} ${jersy.variable} antialiased`}
       >
-        {children}
+        <ConvexClientProvider>{children}</ConvexClientProvider>
       </body>
     </html>
   );

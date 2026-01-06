@@ -1,0 +1,170 @@
+"use client";
+
+import { use } from "react";
+import { useQuery } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
+import { icons } from "@/lib/icons";
+
+const platformLogos: Record<string, any> = {
+  amazon: icons.amazonLogo,
+  flipkart: icons.flipkartLogo,
+  nykaa: icons.nykaaLogo,
+  meesho: icons.meeshoLogo,
+};
+
+const platformNames: Record<string, string> = {
+  amazon: "Amazon",
+  flipkart: "Flipkart",
+  nykaa: "Nykaa",
+  meesho: "Meesho",
+  other: "Shop",
+};
+
+export default function ListPage({
+  params,
+}: {
+  params: Promise<{ listId: Id<"sections"> }>;
+}) {
+  const { listId } = use(params);
+
+  const section = useQuery(api.sections.getById, { id: listId });
+  const items = useQuery(api.items.listBySection, { sectionId: listId });
+
+  if (section === undefined || items === undefined) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <div className="text-muted-foreground animate-pulse">Loading...</div>
+      </main>
+    );
+  }
+
+  if (section === null) {
+    return (
+      <main className="min-h-screen flex items-center justify-center p-4">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold mb-4">List not found</h2>
+          <Link href="/">
+            <Button>Back to Home</Button>
+          </Link>
+        </div>
+      </main>
+    );
+  }
+
+  return (
+    <main className="min-h-screen flex items-center justify-center p-4">
+      <div className="w-full max-w-4xl">
+        <Link href="/" className="inline-block mb-8">
+          <Button variant="ghost" className="gap-2">
+            <ArrowLeft className="h-4 w-4" />
+            Back to collections
+          </Button>
+        </Link>
+
+        <div className="text-center mb-12">
+          <h1 className="text-4xl sm:text-5xl font-styled text-[#CF1662] mb-2">
+            {section.title}
+          </h1>
+          {section.description && (
+            <p className="text-gray-600 mt-2 text-lg">{section.description}</p>
+          )}
+        </div>
+
+        {items.length === 0 ? (
+          <div className="text-center py-16 bg-white/60 backdrop-blur-sm border-2 border-pink-100 rounded-3xl shadow-xl">
+            <p className="text-gray-600 text-lg">
+              No items in this collection yet ♡
+            </p>
+          </div>
+        ) : (
+          <div className="grid max-sm:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {items.map((item, index) => (
+              <a
+                key={item._id}
+                href={item.affiliateLink}
+                target="_blank"
+                rel="nofollow noopener"
+                className="group relative"
+                style={{
+                  animationDelay: `${index * 50}ms`,
+                }}
+              >
+                <div className="relative overflow-hidden border-2 border-pink-200 transition-all duration-300 hover:shadow-2xl hover:border-pink-300">
+                  <div className="absolute top-3 right-3 z-10">
+                    {platformLogos[item.platform] ? (
+                      <div className="bg-white rounded-lg shadow-lg p-2 border border-gray-200">
+                        <Image
+                          src={platformLogos[item.platform]}
+                          alt={platformNames[item.platform]}
+                          width={40}
+                          height={24}
+                          className="object-contain"
+                        />
+                      </div>
+                    ) : (
+                      <Badge className="bg-white text-gray-700 border border-gray-200 shadow-lg">
+                        {platformNames[item.platform] || "Shop"}
+                      </Badge>
+                    )}
+                  </div>
+
+                  {item.imageUrl && (
+                    <div className="w-full h-72">
+                      <img
+                        src={item.imageUrl}
+                        alt={item.itemTitle || "Product"}
+                        className="w-full h-full object-cover transition-transform duration-500"
+                      />
+                    </div>
+                  )}
+
+                  <div className="p-4 bg-pink-100">
+                    <div className="mb-3">
+                      <h2 className="text-base font-semibold text-gray-800 mb-1 line-clamp-2 leading-tight group-hover:text-pink-600 transition-colors">
+                        {item.itemTitle || "View Product"}
+                      </h2>
+                      {item.price && (
+                        <p className="text-base font-bold text-pink-600">
+                          ₹{item.price}
+                        </p>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-center py-2 bg-pink-100 rounded-full group-hover:bg-pink-200 transition-colors">
+                      <span className="text-sm font-semibold text-pink-600">
+                        shop now ♡
+                      </span>
+                      <svg
+                        className="w-4 h-4 ml-1 text-pink-600 transform group-hover:translate-x-1 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
+
+        <footer className="text-center text-xs  mt-12">
+          some links may earn me a small commission at no extra cost to you
+        </footer>
+      </div>
+    </main>
+  );
+}
