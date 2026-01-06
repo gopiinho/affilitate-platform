@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Affiliate Marketing Platform
 
-## Getting Started
+A lightweight, self-hosted affiliate marketing website built with Next.js and Convex.
 
-First, run the development server:
+## Purpose
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This platform allows content creators to organize and share affiliate product recommendations through curated collections. It provides a simple dashboard for managing product links and a clean public-facing interface for visitors to browse recommendations.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Dashboard Management**: Create and organize product collections (sections) with titles and descriptions
+- **Product Management**: Add affiliate links with product details including name, price, platform, and images
+- **Multi-Platform Support**: Works with Amazon, Flipkart, Nykaa, Meesho, and other affiliate networks
+- **Secure Authentication**: Password-protected admin dashboard with session management
+- **Direct Linking**: One-click access to affiliate products for visitors
+- **Responsive Design**: Mobile-friendly interface for both admin and public pages
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech Stack
 
-## Learn More
+- **Frontend**: Next.js 15 with TypeScript
+- **Database**: Convex (real-time backend)
+- **UI Components**: shadcn/ui
+- **Styling**: Tailwind CSS
 
-To learn more about Next.js, take a look at the following resources:
+## Use Cases
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Personal shopping recommendation sites
+- Niche product curation blogs
+- Influencer affiliate storefronts
+- Product review websites
+- Gift guide collections
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Setup
 
-## Deploy on Vercel
+1. Install dependencies: `npm install`
+2. Set up Convex: `npx convex dev`
+3. Create admin user via Convex dashboard
+4. Configure image domains in `next.config.js` for product images
+5. Run development server: `npm run dev`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Why Use This
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- No monthly subscription fees
+- Full control over your data and design
+- Easy to customize and extend
+- Built for performance and SEO
+- Secure credential storage on the backend
