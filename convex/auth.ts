@@ -14,7 +14,6 @@ async function hashPassword(password: string, salt: string): Promise<string> {
   const passwordData = encoder.encode(password);
   const saltData = encoder.encode(salt);
 
-  // Import the password as a key
   const keyMaterial = await crypto.subtle.importKey(
     "raw",
     passwordData,
@@ -89,7 +88,6 @@ export const login = mutation({
       throw new Error("Invalid credentials");
     }
 
-    // Generate session token
     const token = crypto.randomUUID();
     const expiresAt = Date.now() + 7 * 24 * 60 * 60 * 1000; // 7 days
 

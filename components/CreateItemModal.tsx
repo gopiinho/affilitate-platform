@@ -1,4 +1,3 @@
-// components/CreateItemModal.tsx
 "use client";
 
 import { useState } from "react";
@@ -58,7 +57,6 @@ export default function CreateItemModal({
         imageUrl: imageUrl || undefined,
       });
 
-      // Reset form
       setAffiliateLink("");
       setPrice("");
       setPlatform("amazon");
