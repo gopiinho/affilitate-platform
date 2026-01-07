@@ -6,7 +6,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import posthog from "posthog-js";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
@@ -38,10 +38,8 @@ export default function ListPage({
   const section = useQuery(api.sections.getById, { id: listId });
   const items = useQuery(api.items.listBySection, { sectionId: listId });
 
-  // Track if we've captured the collection_viewed event
   const hasTrackedView = useRef(false);
 
-  // Capture collection_viewed event when section data loads
   useEffect(() => {
     if (section && !hasTrackedView.current) {
       posthog.capture("collection_viewed", {
@@ -52,7 +50,6 @@ export default function ListPage({
     }
   }, [section, listId]);
 
-  // Handler for affiliate link clicks
   const handleAffiliateLinkClick = (item: {
     _id: string;
     itemTitle?: string;
@@ -73,7 +70,9 @@ export default function ListPage({
   if (section === undefined || items === undefined) {
     return (
       <main className="min-h-screen flex items-center justify-center">
-        <div className="text-muted-foreground animate-pulse">Loading...</div>
+        <div className="text-primary">
+          <Loader className="h-6 w-6 animate-spin" />
+        </div>
       </main>
     );
   }
@@ -102,7 +101,7 @@ export default function ListPage({
         </Link>
 
         <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-secondary text-[#CF1662] mb-2">
+          <h1 className="text-4xl sm:text-5xl font-secondary text-primary mb-2">
             {section.title}
           </h1>
           {section.description && (
@@ -193,7 +192,7 @@ export default function ListPage({
                 </a>
               ))}
             </div>
-            <div className="text-[#CF1662] w-full">
+            <div className="text-primary w-full">
               <div className="text-center flex flex-col items-center justify-center mt-8 text-[0.6rem]">
                 <p>
                   If you purchase from any of these links, I may receive a small

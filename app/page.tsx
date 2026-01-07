@@ -7,6 +7,7 @@ import { Heart } from "lucide-react";
 import heartPixel from "@/public/icons/heart.png";
 import Cat from "@/components/Cat";
 import CollectionsCard from "@/components/CollectionCard";
+import { Loader } from "lucide-react";
 
 export default function Home() {
   const sections = useQuery(api.sections.list);
@@ -14,7 +15,9 @@ export default function Home() {
   if (sections === undefined) {
     return (
       <main className="min-h-screen flex items-center justify-center">
-        <div className="text-muted-foreground animate-pulse">Loading...</div>
+        <div className="text-primary">
+          <Loader className="h-6 w-6 animate-spin" />
+        </div>
       </main>
     );
   }
@@ -31,7 +34,7 @@ export default function Home() {
               height={32}
               className="w-5 h-5 sm:w-7.5 sm:h-7.5"
             />
-            <h1 className="text-5xl text-[#CF1662] sm:text-7xl font-secondary">
+            <h1 className="text-5xl text-primary sm:text-7xl font-secondary">
               neme's world
             </h1>
             <Image
@@ -49,9 +52,9 @@ export default function Home() {
 
           <div className="relative backdrop-blur-sm bg-white/60 border-2 border-pink-100 p-4 lg:p-6">
             <div className="flex items-center justify-center font-secondary gap-2 mb-8">
-              <p className="text-[#CF1662]">⋆｡˚ ✧</p>
+              <p className="text-primary">⋆｡˚ ✧</p>
               <h5 className="text-xl font-secondary">my collections</h5>
-              <p className="text-[#CF1662]">✧ ⋆｡˚</p>
+              <p className="text-primary">✧ ⋆｡˚</p>
             </div>
 
             {sections.length === 0 ? (
@@ -72,7 +75,7 @@ export default function Home() {
                 ))}
               </div>
             )}
-            <div className="text-[#CF1662] w-full">
+            <div className="text-primary w-full">
               <div className="text-center flex flex-col items-center justify-center mt-8 text-[0.6rem]">
                 <p>
                   If you purchase from any of these links, I may receive a small

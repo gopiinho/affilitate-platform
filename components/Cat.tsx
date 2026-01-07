@@ -96,7 +96,7 @@ export default function Cat() {
           .map((digit, i) => (
             <div
               key={i}
-              className="w-2 h-3 sm:w-3 sm:h-5 bg-[#0f0e0e] text-[#CF1662]
+              className="w-2 h-3 sm:w-3 sm:h-5 bg-[#0f0e0e] text-primary
                          flex items-center justify-center font-mono text-xs sm:text-sm
                          rounded-sm shadow-inner"
             >
