@@ -6,7 +6,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import posthog from "posthog-js";
 import Link from "next/link";
-import { ArrowLeft, Loader } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
@@ -28,6 +28,32 @@ const platformNames: Record<string, string> = {
   other: "Shop",
 };
 
+function ItemCardSkeleton() {
+  return (
+    <div className="group relative animate-pulse">
+      <div className="relative overflow-hidden border-2 border-pink-200">
+        <div className="absolute top-3 right-3 z-10">
+          <div className="bg-white rounded-lg shadow-lg p-2 border border-gray-200 w-16 h-8"></div>
+        </div>
+
+        <div className="w-full h-72 bg-pink-200/50"></div>
+
+        <div className="p-4 grid gap-5 bg-pink-50">
+          <div className="mb-3 space-y-2">
+            <div className="h-5 bg-pink-200/50 rounded w-3/4"></div>
+            <div className="h-5 bg-pink-200/50 rounded w-1/2"></div>
+            <div className="h-4 bg-pink-200/30 rounded w-20 mt-1"></div>
+          </div>
+
+          <div className="flex items-center justify-center py-2 bg-pink-100 rounded-full">
+            <div className="h-3 bg-pink-200/50 rounded w-20"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ListPage({
   params,
 }: {
@@ -39,6 +65,7 @@ export default function ListPage({
   const items = useQuery(api.items.listBySection, { sectionId: listId });
 
   const hasTrackedView = useRef(false);
+  const isLoading = section === undefined || items === undefined;
 
   useEffect(() => {
     if (section && !hasTrackedView.current) {
@@ -67,16 +94,6 @@ export default function ListPage({
     });
   };
 
-  if (section === undefined || items === undefined) {
-    return (
-      <main className="min-h-screen flex items-center justify-center">
-        <div className="text-primary">
-          <Loader className="h-6 w-6 animate-spin" />
-        </div>
-      </main>
-    );
-  }
-
   if (section === null) {
     return (
       <main className="min-h-screen flex items-center justify-center p-4">
@@ -101,15 +118,50 @@ export default function ListPage({
         </Link>
 
         <div className="text-center mb-12">
-          <h1 className="text-4xl sm:text-5xl font-secondary text-primary mb-2">
-            {section.title}
-          </h1>
-          {section.description && (
-            <p className=" mt-2 text-base">{section.description}</p>
+          {isLoading ? (
+            <div className="space-y-3 flex flex-col items-center animate-pulse">
+              <div className="h-12 bg-pink-200/50 rounded w-64 mx-auto"></div>
+              <div className="h-5 bg-pink-200/30 rounded w-96 mx-auto"></div>
+            </div>
+          ) : (
+            <>
+              <h1 className="text-4xl sm:text-5xl font-secondary text-primary mb-2">
+                {section.title}
+              </h1>
+              {section.description && (
+                <p className="mt-2 text-base">{section.description}</p>
+              )}
+            </>
           )}
         </div>
 
-        {items.length === 0 ? (
+        {isLoading ? (
+          <div className="p-6 bg-pink-50">
+            <div className="grid max-sm:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map((i) => (
+                <ItemCardSkeleton key={i} />
+              ))}
+            </div>
+            <div className="text-primary w-full">
+              <div className="text-center flex flex-col items-center justify-center mt-8 text-[0.6rem]">
+                <p>
+                  If you purchase from any of these links, I may receive a small
+                  commission.
+                </p>
+                <div className="flex gap-1 items-center justify-center">
+                  Thank youuu for the support
+                  <Image
+                    src={heartPixel.src}
+                    alt="heart pixel"
+                    width={5}
+                    height={5}
+                    className="w-2 h-2 sm:w-2 sm:h-2"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : items.length === 0 ? (
           <div className="text-center py-16 bg-pink-50 backdrop-blur-sm border-2 border-pink-100 shadow-xl">
             <p className="text-gray-600 text-sm">
               No items in this collection yet :(
