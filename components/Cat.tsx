@@ -91,18 +91,29 @@ export default function Cat() {
         </AnimatePresence>
       </div>
 
-      <div className="flex gap-0.5 bg-black/60 p-1 rounded-md">
+      <div
+        className="flex gap-0.5 bg-pink-100 p-1   shadow-[inset_0_1px_0_rgba(255,255,255,0.8),inset_0_-1px_0_rgba(0,0,0,0.15),0_2px_0_rgba(0,0,0,0.15)]
+          border border-pink-300
+          rounded-[2px]"
+      >
         {String(catCount ?? 0)
           .padStart(7, "0")
           .split("")
           .map((digit, i) => (
             <div
               key={i}
-              className="w-2 h-3 sm:w-3 sm:h-5 bg-[#0f0e0e] text-primary
-                         flex items-center justify-center font-mono text-xs sm:text-sm
-                         rounded-sm shadow-inner"
+              className="
+          relative
+          w-2 h-3 sm:w-3 sm:h-5
+          bg-pink-200
+          flex items-center justify-center
+          font-mono text-xs sm:text-sm text-primary
+
+        
+        "
             >
-              {digit}
+              <span className="absolute inset-x-0 top-0 h-px bg-white/70" />
+              <span className="relative z-10 leading-none">{digit}</span>
             </div>
           ))}
       </div>

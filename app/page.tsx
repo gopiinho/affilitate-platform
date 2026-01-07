@@ -64,53 +64,99 @@ export default function Home() {
               className="w-5 h-5 sm:w-7.5 sm:h-7.5"
             />
           </div>
-          <div className="flex gap-4 w-full font-secondary text-xl items-center justify-center">
-            <Link
-              href={"https://www.wishlink.com/nemeowww2811"}
-              className="text-primary"
-              target="_blank"
-              rel="noopener norefererrer"
-            >
-              Wishlink
-            </Link>
-            •
-            <Link
-              href={"http://instagram.com/ne_meowww/"}
-              className="text-primary"
-              target="_blank"
-              rel="noopener norefererrer"
-            >
-              Instagram
-            </Link>
-            •
-            <Link
-              href={"https://www.youtube.com/@nemeowww"}
-              className="text-primary"
-              target="_blank"
-              rel="noopener norefererrer"
-            >
-              Youtube
-            </Link>
-            •
-            <Link
-              href={"https://x.com/nemeowww?s=21"}
-              className="text-primary"
-              target="_blank"
-              rel="noopener norefererrer"
-            >
-              X
-            </Link>
-            •
-            <Link
-              href={
-                "https://open.spotify.com/user/tugd4f23lueaynpgf92jnu6q6?si=9zcQL4seQ36X8di0KpwaLg"
-              }
-              className="text-primary"
-              target="_blank"
-              rel="noopener norefererrer"
-            >
-              Spotify
-            </Link>
+
+          <div className="font-secondary text-xl text-primary text-center">
+            <div className="sm:hidden">
+              <div className="flex items-center justify-center">
+                <Link
+                  href="https://www.wishlink.com/nemeowww2811"
+                  className="px-2 py-1"
+                  target="_blank"
+                >
+                  Wishlink
+                </Link>
+                <span className="mx-3 text-foreground">•</span>
+                <Link
+                  href="http://instagram.com/ne_meowww/"
+                  className="px-2 py-1"
+                  target="_blank"
+                >
+                  Instagram
+                </Link>
+                <span className="mx-3 text-foreground">•</span>
+                <Link
+                  href="https://www.youtube.com/@nemeowww"
+                  className="px-2 py-1"
+                  target="_blank"
+                >
+                  Youtube
+                </Link>
+              </div>
+
+              <div className="flex items-center justify-center">
+                <Link
+                  href="https://x.com/nemeowww?s=21"
+                  className="px-2 py-1"
+                  target="_blank"
+                >
+                  X
+                </Link>
+                <span className="mx-3 text-foreground">•</span>
+                <Link
+                  href="https://open.spotify.com/user/tugd4f23lueaynpgf92jnu6q6"
+                  className="px-2 py-1"
+                  target="_blank"
+                >
+                  Spotify
+                </Link>
+              </div>
+            </div>
+
+            <div className="hidden sm:flex items-center justify-center">
+              <Link
+                href="https://www.wishlink.com/nemeowww2811"
+                className="px-2 py-1"
+                target="_blank"
+              >
+                Wishlink
+              </Link>
+              <span className="mx-3 text-foreground">•</span>
+
+              <Link
+                href="http://instagram.com/ne_meowww/"
+                className="px-2 py-1"
+                target="_blank"
+              >
+                Instagram
+              </Link>
+              <span className="mx-3 text-foreground">•</span>
+
+              <Link
+                href="https://www.youtube.com/@nemeowww"
+                className="px-2 py-1"
+                target="_blank"
+              >
+                Youtube
+              </Link>
+              <span className="mx-3 text-foreground">•</span>
+
+              <Link
+                href="https://x.com/nemeowww?s=21"
+                className="px-2 py-1"
+                target="_blank"
+              >
+                X
+              </Link>
+              <span className="mx-3 text-foreground">•</span>
+
+              <Link
+                href="https://open.spotify.com/user/tugd4f23lueaynpgf92jnu6q6"
+                className="px-2 py-1"
+                target="_blank"
+              >
+                Spotify
+              </Link>
+            </div>
           </div>
         </div>
 
