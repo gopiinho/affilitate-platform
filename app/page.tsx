@@ -7,6 +7,7 @@ import { Heart } from "lucide-react";
 import heartPixel from "@/public/icons/heart.png";
 import Cat from "@/components/Cat";
 import CollectionsCard from "@/components/CollectionCard";
+import Link from "next/link";
 
 function CollectionCardSkeleton() {
   return (
@@ -62,6 +63,45 @@ export default function Home() {
               height={32}
               className="w-5 h-5 sm:w-7.5 sm:h-7.5"
             />
+          </div>
+          <div className="flex gap-4 w-full font-secondary text-xl items-center justify-center">
+            <Link
+              href={"http://instagram.com/ne_meowww/"}
+              className="text-primary"
+              target="_blank"
+              rel="noopener norefererrer"
+            >
+              Instagram
+            </Link>{" "}
+            •
+            <Link
+              href={"https://www.youtube.com/@nemeowww"}
+              className="text-primary"
+              target="_blank"
+              rel="noopener norefererrer"
+            >
+              Youtube
+            </Link>
+            •
+            <Link
+              href={"https://x.com/nemeowww?s=21"}
+              className="text-primary"
+              target="_blank"
+              rel="noopener norefererrer"
+            >
+              X
+            </Link>
+            •
+            <Link
+              href={
+                "https://open.spotify.com/user/tugd4f23lueaynpgf92jnu6q6?si=9zcQL4seQ36X8di0KpwaLg"
+              }
+              className="text-primary"
+              target="_blank"
+              rel="noopener norefererrer"
+            >
+              Spotify
+            </Link>
           </div>
         </div>
 
