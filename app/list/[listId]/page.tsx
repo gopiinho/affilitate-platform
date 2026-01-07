@@ -92,7 +92,7 @@ export default function ListPage({
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4">
+    <main className="min-h-screen flex justify-center p-4">
       <div className="w-full max-w-4xl">
         <Link href="/" className="inline-block mb-8">
           <Button variant="ghost" className="gap-2">
@@ -111,9 +111,9 @@ export default function ListPage({
         </div>
 
         {items.length === 0 ? (
-          <div className="text-center py-16 bg-pink-50 backdrop-blur-sm border-2 border-pink-100 rounded-3xl shadow-xl">
-            <p className="text-gray-600 text-lg">
-              No items in this collection yet ♡
+          <div className="text-center py-16 bg-pink-50 backdrop-blur-sm border-2 border-pink-100 shadow-xl">
+            <p className="text-gray-600 text-sm">
+              No items in this collection yet :(
             </p>
           </div>
         ) : (
@@ -193,20 +193,20 @@ export default function ListPage({
                 </a>
               ))}
             </div>
-            <div className="flex gap-3 text-[#CF1662] w-full items-center justify-center">
-              <div className="text-center flex flex-col items-center justify-center gap-1 mt-8 text-xs">
+            <div className="text-[#CF1662] w-full">
+              <div className="text-center flex flex-col items-center justify-center mt-8 text-[0.6rem]">
                 <p>
                   If you purchase from any of these links, I may receive a small
                   commission.
                 </p>
-                <div className="flex gap-2 items-center justify-center">
+                <div className="flex gap-1 items-center justify-center">
                   Thank youuu for the support
                   <Image
                     src={heartPixel.src}
                     alt="heart pixel"
                     width={5}
                     height={5}
-                    className="w-1 h-1 sm:w-2 sm:h-2"
+                    className="w-2 h-2 sm:w-2 sm:h-2"
                   />
                 </div>
               </div>

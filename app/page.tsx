@@ -20,7 +20,7 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4">
+    <main className="min-h-screen flex justify-center p-4">
       <div className="w-full max-w-3xl">
         <div className="text-center max-sm:my-12 max-sm:mb-24 sm:my-16 space-y-4">
           <div className="inline-flex justify-center items-center gap-2 mb-2">
@@ -50,7 +50,7 @@ export default function Home() {
           <div className="relative backdrop-blur-sm bg-white/60 border-2 border-pink-100 p-4 lg:p-6">
             <div className="flex items-center justify-center font-secondary gap-2 mb-8">
               <p className="text-[#CF1662]">⋆｡˚ ✧</p>
-              <h5 className="text-base font-secondary">my collections</h5>
+              <h5 className="text-xl font-secondary">my collections</h5>
               <p className="text-[#CF1662]">✧ ⋆｡˚</p>
             </div>
 
@@ -73,19 +73,19 @@ export default function Home() {
               </div>
             )}
             <div className="text-[#CF1662] w-full">
-              <div className="text-center flex flex-col items-center justify-center mt-8 text-xs">
+              <div className="text-center flex flex-col items-center justify-center mt-8 text-[0.6rem]">
                 <p>
                   If you purchase from any of these links, I may receive a small
                   commission.
                 </p>
-                <div className="flex gap-2 items-center justify-center">
+                <div className="flex gap-1 items-center justify-center">
                   Thank youuu for the support
                   <Image
                     src={heartPixel.src}
                     alt="heart pixel"
                     width={5}
                     height={5}
-                    className="w-1 h-1 sm:w-2 sm:h-2"
+                    className="w-2 h-2 sm:w-2 sm:h-2"
                   />
                 </div>
               </div>

@@ -22,8 +22,8 @@ const jersy = Jersey_10({
 });
 
 export const metadata: Metadata = {
-  title: "nemeowww",
-  description: "cute beauty finds ♡",
+  title: "Neme's World",
+  description: "I share everything here...",
 };
 
 export default function RootLayout({
