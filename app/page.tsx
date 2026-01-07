@@ -66,13 +66,22 @@ export default function Home() {
           </div>
           <div className="flex gap-4 w-full font-secondary text-xl items-center justify-center">
             <Link
+              href={"https://www.wishlink.com/nemeowww2811"}
+              className="text-primary"
+              target="_blank"
+              rel="noopener norefererrer"
+            >
+              Wishlink
+            </Link>
+            •
+            <Link
               href={"http://instagram.com/ne_meowww/"}
               className="text-primary"
               target="_blank"
               rel="noopener norefererrer"
             >
               Instagram
-            </Link>{" "}
+            </Link>
             •
             <Link
               href={"https://www.youtube.com/@nemeowww"}
