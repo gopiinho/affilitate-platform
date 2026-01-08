@@ -10,6 +10,7 @@
 
 import type * as auth from "../auth.js";
 import type * as catCounter from "../catCounter.js";
+import type * as instagram from "../instagram.js";
 import type * as items from "../items.js";
 import type * as sections from "../sections.js";
 
@@ -22,6 +23,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   catCounter: typeof catCounter;
+  instagram: typeof instagram;
   items: typeof items;
   sections: typeof sections;
 }>;

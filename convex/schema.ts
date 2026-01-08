@@ -36,4 +36,52 @@ export default defineSchema({
   catCounter: defineTable({
     count: v.number(),
   }),
+
+  instagramConfig: defineTable({
+    accessToken: v.string(),
+    instagramAccountId: v.string(),
+    lastTokenRefresh: v.number(),
+    tokenExpiresAt: v.number(),
+    rateLimitCallCount: v.number(),
+    rateLimitResetTime: v.number(),
+    lastApiCallTime: v.number(),
+  }),
+
+  reelMappings: defineTable({
+    reelId: v.string(),
+    reelUrl: v.string(),
+    thumbnailUrl: v.optional(v.string()),
+    caption: v.optional(v.string()),
+    sectionId: v.id("sections"),
+    keyword: v.string(),
+    active: v.boolean(),
+    maxItemsInDM: v.number(), // default: 10
+    includeWebsiteLink: v.boolean(),
+    publishedAt: v.optional(v.number()),
+  })
+    .index("by_reel", ["reelId"])
+    .index("by_active", ["active"]),
+
+  commentLogs: defineTable({
+    commentId: v.string(),
+    reelId: v.string(),
+    instagramUserId: v.string(),
+    username: v.string(),
+    commentText: v.string(),
+    keyword: v.string(),
+    sectionId: v.optional(v.id("sections")),
+    dmSent: v.boolean(),
+    dmError: v.optional(v.string()),
+    timestamp: v.number(),
+  }).index("by_comment", ["commentId"]),
+
+  dmLogs: defineTable({
+    instagramUserId: v.string(),
+    username: v.string(),
+    sectionId: v.id("sections"),
+    messageText: v.string(),
+    success: v.boolean(),
+    error: v.optional(v.string()),
+    timestamp: v.number(),
+  }).index("by_user", ["instagramUserId"]),
 });
