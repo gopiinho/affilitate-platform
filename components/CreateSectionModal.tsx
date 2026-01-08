@@ -55,7 +55,7 @@ export default function CreateSectionModal({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Create New Section</DialogTitle>
+          <DialogTitle>Create New List</DialogTitle>
           <DialogDescription>
             Add a new product collection to your site.
           </DialogDescription>

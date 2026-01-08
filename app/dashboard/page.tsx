@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -40,22 +41,31 @@ export default function DashboardPage() {
   return (
     <div>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-        <div>
-          <h2 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-            Your Sections
-          </h2>
-          <p className="text-muted-foreground mt-1">
+        <div className="mt-3">
+          <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
+            Your Promotions
+          </h1>
+          <p className="text-muted-foreground text-sm mt-1">
             Manage your affiliate product collections
           </p>
         </div>
-        <Button
-          onClick={() => setShowCreateModal(true)}
-          size="lg"
-          className="gap-2"
-        >
-          <Plus className="h-4 w-4" />
-          New Section
-        </Button>
+        <div className="flex gap-2 max-sm:hidden">
+          <Link href={"/dashboard/create"}>
+            <Button size="lg" className="gap-2">
+              <Plus className="h-4 w-4" />
+              Create
+            </Button>
+          </Link>
+          <Button
+            onClick={() => setShowCreateModal(true)}
+            size="lg"
+            variant="outline"
+            className="gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            New List
+          </Button>
+        </div>
       </div>
 
       {sections.length === 0 ? (
