@@ -62,6 +62,32 @@ export default defineSchema({
     .index("by_reel", ["reelId"])
     .index("by_active", ["active"]),
 
+  dmJobs: defineTable({
+    instagramUserId: v.string(),
+    username: v.string(),
+    sectionId: v.id("sections"),
+    reelId: v.string(),
+    status: v.union(
+      v.literal("pending"),
+      v.literal("processing"),
+      v.literal("sent"),
+      v.literal("failed"),
+      v.literal("duplicate") // commented twice
+    ),
+    createdAt: v.number(),
+    scheduledFor: v.optional(v.number()), // worker attempt time
+    attemptCount: v.number(),
+    lastAttemptAt: v.optional(v.number()),
+    sentAt: v.optional(v.number()),
+    triggerType: v.union(v.literal("comment"), v.literal("dm")),
+    triggerId: v.string(), // commentId or messageId
+    messageText: v.optional(v.string()),
+    error: v.optional(v.string()),
+  })
+    .index("by_status", ["status"])
+    .index("by_user_reel", ["instagramUserId", "reelId"]) // detect duplicates
+    .index("by_scheduled", ["scheduledFor"]), // worker query
+
   commentLogs: defineTable({
     commentId: v.string(),
     reelId: v.string(),
