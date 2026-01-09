@@ -67,6 +67,8 @@ export default defineSchema({
     username: v.string(),
     sectionId: v.id("sections"),
     reelId: v.string(),
+    maxItemsInDM: v.number(),
+    includeWebsiteLink: v.boolean(),
     status: v.union(
       v.literal("pending"),
       v.literal("processing"),
@@ -87,6 +89,13 @@ export default defineSchema({
     .index("by_status", ["status"])
     .index("by_user_reel", ["instagramUserId", "reelId"]) // detect duplicates
     .index("by_scheduled", ["scheduledFor"]), // worker query
+
+  dmRateLimitState: defineTable({
+    dmsSentInLastHour: v.array(v.number()), // timestamps of last 195 DMs
+    lastDmSentAt: v.optional(v.number()), // 1-second spacing
+    workerLastRun: v.optional(v.number()),
+    workerActive: v.boolean(),
+  }),
 
   commentLogs: defineTable({
     commentId: v.string(),
