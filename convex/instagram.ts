@@ -374,6 +374,30 @@ export const findMappingForComment = query({
   },
 });
 
+export const findMappingForReel = query({
+  args: {
+    reelId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const mapping = await ctx.db
+      .query("reelMappings")
+      .withIndex("by_reel", (q) => q.eq("reelId", args.reelId))
+      .filter((q) => q.eq(q.field("active"), true))
+      .first();
+
+    if (!mapping) return null;
+
+    const section = await ctx.db.get(mapping.sectionId);
+
+    return {
+      mappingId: mapping._id,
+      sectionId: mapping.sectionId,
+      sectionTitle: section?.title || "Collection",
+      keyword: mapping.keyword,
+    };
+  },
+});
+
 export const logComment = mutation({
   args: {
     commentId: v.string(),
