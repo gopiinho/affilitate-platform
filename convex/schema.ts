@@ -1,19 +1,28 @@
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
-import { s } from "motion/react-client";
 
 export default defineSchema({
   adminUsers: defineTable({
     email: v.string(),
     passwordHash: v.string(),
     salt: v.string(),
+    failedLoginAttempts: v.number(),
+    lastFailedLogin: v.optional(v.number()),
+    accountLocked: v.boolean(),
+    accountLockedUntil: v.optional(v.number()),
   }).index("by_email", ["email"]),
 
   sessions: defineTable({
     userId: v.id("adminUsers"),
     token: v.string(),
     expiresAt: v.number(),
-  }).index("by_token", ["token"]),
+    ipAddress: v.optional(v.string()),
+    userAgent: v.optional(v.string()),
+    createdAt: v.number(),
+    lastUsedAt: v.number(),
+  })
+    .index("by_token", ["token"])
+    .index("by_user", ["userId"]),
 
   sections: defineTable({
     title: v.string(),

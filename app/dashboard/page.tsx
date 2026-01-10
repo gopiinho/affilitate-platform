@@ -4,115 +4,289 @@ import { useState } from "react";
 import Link from "next/link";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import SectionCard from "@/components/SectionCard";
-import CreateSectionModal from "@/components/CreateSectionModal";
-import EditSectionModal from "@/components/EditSectionModal";
 import { Button } from "@/components/ui/button";
-import { Plus, Sparkles, Package } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Plus,
+  Package,
+  Instagram,
+  MessageCircle,
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  TrendingUp,
+  Play,
+  Pause,
+} from "lucide-react";
 
 export default function DashboardPage() {
   const sections = useQuery(api.sections.list);
-  const deleteSection = useMutation(api.sections.remove);
+  const queueStats = useQuery(api.dmQueue.getQueueStats);
+  const instagramStats = useQuery(api.instagram.getStats);
+  const publishedMappings = useQuery(api.instagram.getPublishedMappings);
+  const kickoffWorker = useMutation(api.dmQueue.kickoffWorker);
 
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [editingSection, setEditingSection] = useState<{
-    id: Id<"sections">;
-    title: string;
-    description?: string;
-  } | null>(null);
+  const [startingWorker, setStartingWorker] = useState(false);
 
-  const handleDelete = async (id: Id<"sections">) => {
-    if (
-      confirm("Are you sure? This will delete the section and all its items.")
-    ) {
-      await deleteSection({ id });
+  const handleStartWorker = async () => {
+    setStartingWorker(true);
+    try {
+      await kickoffWorker();
+    } catch (error) {
+      console.error("Failed to start worker:", error);
+    } finally {
+      setStartingWorker(false);
     }
   };
 
-  if (sections === undefined) {
+  const isLoading =
+    sections === undefined ||
+    queueStats === undefined ||
+    instagramStats === undefined;
+
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="text-muted-foreground">Loading...</div>
+        <div className="text-muted-foreground">Loading dashboard...</div>
       </div>
     );
   }
 
   return (
-    <div>
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
-        <div className="mt-3">
-          <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-            Your Promotions
-          </h1>
+    <div className="space-y-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Manage your affiliate product collections
+            Manage your Instagram affiliate automation
           </p>
         </div>
-        <div className="flex gap-2 max-sm:hidden">
-          <Link href={"/dashboard/create"}>
-            <Button size="lg" className="gap-2">
-              <Plus className="h-4 w-4" />
-              Create
-            </Button>
-          </Link>
-          <Button
-            onClick={() => setShowCreateModal(true)}
-            size="lg"
-            variant="outline"
-            className="gap-2"
-          >
+        <Link href="/dashboard/create">
+          <Button size="lg" className="gap-2">
             <Plus className="h-4 w-4" />
-            New List
+            New Post
           </Button>
+        </Link>
+      </div>
+
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-semibold flex items-center gap-2">
+            <Instagram className="h-5 w-5" />
+            DM Queue Status
+          </h2>
+
+          {queueStats && !queueStats.workerActive && queueStats.pending > 0 && (
+            <Button
+              onClick={handleStartWorker}
+              disabled={startingWorker}
+              size="sm"
+              className="gap-2"
+            >
+              <Play className="h-4 w-4" />
+              {startingWorker ? "Starting..." : "Start Worker"}
+            </Button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium flex items-center justify-between">
+                Worker Status
+                {queueStats?.workerActive ? (
+                  <Badge className="bg-green-500">
+                    <div className="flex items-center gap-1">
+                      <div className="h-2 w-2 bg-white rounded-full animate-pulse" />
+                      Active
+                    </div>
+                  </Badge>
+                ) : (
+                  <Badge variant="secondary">
+                    <Pause className="h-3 w-3 mr-1" />
+                    Idle
+                  </Badge>
+                )}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {queueStats?.workerActive ? "Running" : "Stopped"}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Sending {queueStats?.dmsSentInLastHour || 0}/195 DMs this hour
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                <Clock className="h-4 w-4 text-yellow-500" />
+                Pending
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-yellow-600">
+                {queueStats?.pending || 0}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                {queueStats?.estimatedMinutesToClear
+                  ? `~${queueStats.estimatedMinutesToClear} min to clear`
+                  : "Queue empty"}
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                <CheckCircle className="h-4 w-4 text-green-500" />
+                Sent
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-green-600">
+                {queueStats?.sent || 0}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                Total DMs delivered successfully
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-medium flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 text-red-500" />
+                Failed
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-red-600">
+                {queueStats?.failed || 0}
+              </div>
+              <p className="text-xs text-muted-foreground mt-1">
+                DMs that couldn't be delivered
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
-      {sections.length === 0 ? (
-        <div className="border-2 border-dashed rounded-lg p-12 text-center">
-          <div className="flex justify-center mb-4">
-            <Package className="h-12 w-12 text-muted-foreground" />
+      {instagramStats && (
+        <div>
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <TrendingUp className="h-5 w-5" />
+            Activity Overview
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium">
+                  Comments (24h)
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {instagramStats.commentsLast24h}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {instagramStats.totalComments} total
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium">
+                  DMs Sent (24h)
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {instagramStats.dmsLast24h}
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {instagramStats.totalDMs} total
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium">
+                  Success Rate
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-green-600">
+                  {instagramStats.dmSuccessRate}%
+                </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  DM delivery success
+                </p>
+              </CardContent>
+            </Card>
           </div>
-          <h3 className="text-lg font-semibold mb-2">No sections yet</h3>
-          <p className="text-muted-foreground mb-4">
-            Create your first section to start adding affiliate products.
-          </p>
-          <Button onClick={() => setShowCreateModal(true)} className="gap-2">
-            <Plus className="h-4 w-4" />
-            Create Section
-          </Button>
         </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {sections.map((section) => (
-            <SectionCard
-              key={section._id}
-              section={section}
-              onEdit={() =>
-                setEditingSection({
-                  id: section._id,
-                  title: section.title,
-                  description: section.description,
-                })
-              }
-              onDelete={() => handleDelete(section._id)}
-            />
+      )}
+
+      <div>
+        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+          <MessageCircle className="h-5 w-5" />
+          Active Instagram Posts
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {publishedMappings?.slice(0, 6).map((mapping) => (
+            <Card
+              key={mapping._id}
+              className="hover:shadow-lg transition-shadow"
+            >
+              <CardHeader className="pb-3">
+                <div className="flex items-start justify-between">
+                  <div className="flex-1 min-w-0">
+                    <CardTitle className="text-sm font-medium truncate">
+                      {mapping.sectionTitle}
+                    </CardTitle>
+                    <p className="text-xs text-muted-foreground mt-1 truncate">
+                      Keyword: "{mapping.keyword}"
+                    </p>
+                  </div>
+                  <Badge className="bg-green-500 ml-2">Live</Badge>
+                </div>
+              </CardHeader>
+
+              <CardContent>
+                {mapping.thumbnailUrl && (
+                  <div className="aspect-video rounded-lg overflow-hidden mb-3">
+                    <img
+                      src={mapping.thumbnailUrl}
+                      alt="Reel thumbnail"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>Max items: {mapping.maxItemsInDM}</span>
+                  <a
+                    href={mapping.reelUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:underline"
+                  >
+                    View Reel →
+                  </a>
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
-      )}
-
-      <CreateSectionModal
-        open={showCreateModal}
-        onClose={() => setShowCreateModal(false)}
-      />
-
-      {editingSection && (
-        <EditSectionModal
-          section={editingSection}
-          open={!!editingSection}
-          onClose={() => setEditingSection(null)}
-        />
-      )}
+      </div>
     </div>
   );
 }
