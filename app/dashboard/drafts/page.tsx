@@ -16,7 +16,7 @@ export default function DraftsPage() {
   const handlePublish = async (id: any) => {
     if (confirm("Publish this post? Auto-DM will be activated.")) {
       await publishMapping({ id });
-      alert("✅ Published! Auto-DM is now active.");
+      alert("Published! Auto-DM is now active.");
     }
   };
 

@@ -80,11 +80,7 @@ export default function CreatePostPage() {
         maxItemsInDM,
         includeWebsiteLink,
       });
-
-      alert(
-        "✅ Draft saved! You can review and publish it from the drafts tab."
-      );
-      router.push("/dashboard/instagram/drafts");
+      router.push("/dashboard/drafts");
     } catch (error: any) {
       alert("Error: " + error.message);
     } finally {
