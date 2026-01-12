@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useAction } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useRouter } from "next/navigation";
@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { RefreshCw, ExternalLink, Eye } from "lucide-react";
+import { RefreshCw, ExternalLink, Eye, Check } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 
 export default function CreatePostPage() {
@@ -34,7 +34,6 @@ export default function CreatePostPage() {
   const [maxItemsInDM, setMaxItemsInDM] = useState(10);
   const [includeWebsiteLink, setIncludeWebsiteLink] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [reelsLoading, setReelsLoading] = useState(false);
   const [reels, setReels] = useState<any[]>([]);
   const [previewMessage, setPreviewMessage] = useState<any>(null);
 
@@ -53,17 +52,18 @@ export default function CreatePostPage() {
       : "skip"
   );
 
-  const handleFetchReels = async () => {
-    setReelsLoading(true);
-    try {
-      const fetchedReels = await fetchReels({});
-      setReels(fetchedReels);
-    } catch (error: any) {
-      alert("Error: " + error.message);
-    } finally {
-      setReelsLoading(false);
-    }
-  };
+  useEffect(() => {
+    const loadReels = async () => {
+      try {
+        const fetchedReels = await fetchReels({});
+        setReels(fetchedReels);
+      } catch (err) {
+        console.error("Failed to fetch reels", err);
+      }
+    };
+
+    loadReels();
+  }, []);
 
   const handleSaveDraft = async () => {
     if (!selectedReel || !selectedSection) return;
@@ -90,87 +90,80 @@ export default function CreatePostPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <div className="mt-3">
-        <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
+      <div className="mt-3 w-full text-center items-center justify-center">
+        <h1 className="text-xl font-bold tracking-tight gap-2">
           Create New Post
         </h1>
-        <p className="text-muted-foreground text-sm">
+        <p className="text-muted-foreground text-xs">
           Link an Instagram reel to a collection and configure auto-DM
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Step 1: Select Reel</CardTitle>
-          <CardDescription>Fetch your recent Instagram reels</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Button
-            onClick={handleFetchReels}
-            disabled={reelsLoading || !config}
-            className="w-full"
-          >
-            <RefreshCw
-              className={`h-4 w-4 mr-2 ${reelsLoading ? "animate-spin" : ""}`}
-            />
-            {reelsLoading ? "Fetching..." : "Fetch Recent Reels"}
-          </Button>
-
+      <div className="space-y-2 mt-4 sm:mt-10">
+        <p className="py-2 font-xl text-center font-semibold">1. Select Reel</p>
+        <div className="space-y-4">
           {reels.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {reels.map((reel) => (
                 <div
                   key={reel.id}
                   onClick={() => setSelectedReel(reel)}
-                  className={`cursor-pointer border-2 rounded-lg p-3 transition-all ${
+                  className={`cursor-pointer relative overflow-hidden border-2 rounded-lg transition-all ${
                     selectedReel?.id === reel.id
                       ? "border-pink-500 bg-pink-50"
                       : "border-gray-200 hover:border-pink-300"
                   }`}
                 >
-                  <div className="flex gap-3">
+                  <div className="flex flex-col">
                     {reel.thumbnailUrl && (
-                      <img
-                        src={reel.thumbnailUrl}
-                        alt="Reel"
-                        className="w-20 h-20 object-cover rounded"
-                      />
+                      <div className="w-full aspect-4/5 overflow-hidden bg-gray-100">
+                        <img
+                          src={reel.thumbnailUrl}
+                          alt="Reel"
+                          className="w-full h-full object-cover object-center"
+                        />
+                      </div>
                     )}
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate">
+                    <div className="flex-1 min-w-0 p-2">
+                      <p className="text-sm font-semibold truncate">
                         {reel.caption}
                       </p>
                       <a
                         href={reel.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-blue-600 hover:underline flex items-center gap-1 mt-1"
+                        className="text-xs text-primary hover:underline flex items-center gap-1 mt-1"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        View on Instagram
+                        View
                         <ExternalLink className="h-3 w-3" />
                       </a>
-                      {selectedReel?.id === reel.id && (
-                        <Badge className="mt-2 bg-pink-500">Selected</Badge>
-                      )}
+                      <div className="absolute top-2 right-3">
+                        <div
+                          className={`h-5 w-5 rounded-full border-2 flex items-center justify-center transition-all
+      ${selectedReel?.id === reel.id ? "border-pink-500" : "border-gray-300"}
+    `}
+                        >
+                          {selectedReel?.id === reel.id && (
+                            <div className="h-2.5 w-2.5 rounded-full bg-pink-500" />
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           )}
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {selectedReel && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Step 2: Select Collection</CardTitle>
-            <CardDescription>
-              Which collection should be sent when users comment?
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div className="space-y-2 mt-4 sm:mt-10">
+          <p className="py-2 font-xl text-center font-semibold">
+            Step 2: Select Collection
+          </p>
+          <div className="space-y-4">
             <div>
               <Label>Collection</Label>
               <Select
@@ -201,19 +194,16 @@ export default function CreatePostPage() {
                 Users will comment this to trigger the DM
               </p>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {selectedSection && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Step 3: Configure DM Message</CardTitle>
-            <CardDescription>
-              Customize what gets sent in the auto-DM
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+        <div className="space-y-2 mt-4 sm:mt-10">
+          <p className="py-2 font-xl text-center font-semibold">
+            Step 3: Configure DM Message
+          </p>
+          <div className="space-y-4">
             <div>
               <Label>Max Items in DM</Label>
               <Input
@@ -264,8 +254,8 @@ export default function CreatePostPage() {
                 </div>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
 
       {selectedReel && selectedSection && (
