@@ -18,6 +18,7 @@ import {
   TrendingUp,
   Play,
   Pause,
+  List,
 } from "lucide-react";
 
 export default function DashboardPage() {
@@ -62,12 +63,25 @@ export default function DashboardPage() {
             Manage your Instagram affiliate automation
           </p>
         </div>
-        <Link href="/dashboard/create">
-          <Button size="lg" className="gap-2">
-            <Plus className="h-4 w-4" />
-            New Post
-          </Button>
-        </Link>
+        <div className="flex gap-3 flex-wrap max-sm:hidden">
+          <Link href="/dashboard/create">
+            <Button size="lg" className="gap-2">
+              <Plus className="h-4 w-4" />
+              New Post
+            </Button>
+          </Link>
+          <Link href="/dashboard/lists">
+            <Button size="lg" className="gap-2" variant="outline">
+              <List className="h-4 w-4" />
+              Your Lists
+            </Button>
+          </Link>
+          <Link href="/dashboard/drafts">
+            <Button size="lg" className="gap-2" variant="outline">
+              Drafts
+            </Button>
+          </Link>
+        </div>
       </div>
 
       <div>
